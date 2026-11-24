@@ -187,13 +187,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
       var all = DATA[ch], done = all.filter(function(v){ return watched[v.id]; }).length;
       $('n-'+ch).textContent = done + '/' + all.length;
     });
-    var all = DATA[state.ch], done = 0, leftSec = 0;
-    all.forEach(function(v){ if (watched[v.id]) done++; else leftSec += v.s; });
+    var all = DATA[state.ch], done = 0, leftSec = 0, totalSec = 0;
+    all.forEach(function(v){ totalSec += v.s; if (watched[v.id]) done++; else leftSec += v.s; });
     $('sum-done').textContent = done;
     $('sum-total').textContent = all.length;
     $('sum-left').textContent = all.length - done;
     $('sum-time').textContent = tc(leftSec);
-    $('bar').style.width = (all.length ? done / all.length * 100 : 0) + '%';
+    $('bar').style.width = (totalSec ? (totalSec - leftSec) / totalSec * 100 : 0) + '%';
   }
 
   function cell(cls){ var td = document.createElement('td'); td.className = cls; return td; }
