@@ -1,0 +1,23 @@
+{
+  "name": "林さんになる動画チェッカー",
+  "short_name": "林さんチェッカー",
+  "description": "林さんと bird and insect の YouTube 動画を、見た・見てないでチェックできるリスト。",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#e4d9d4",
+  "theme_color": "#e4d9d4",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

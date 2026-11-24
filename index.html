@@ -7,6 +7,12 @@
 <meta name="description" content="林さんと bird and insect の YouTube 動画を、見た・見てないでチェックできるリスト。">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#e4d9d4">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="林さんチェッカー">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
@@ -38,6 +44,16 @@ h1{font-family:var(--font-display);font-weight:400;color:var(--navy);font-size:3
 br.sp{display:none}
 .lede a{color:var(--navy);text-decoration:underline;text-underline-offset:3px}
 
+.install{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.install[hidden]{display:none}
+.install-row{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
+.install-btn{font:inherit;font-size:14px;color:var(--sheet);background:var(--navy);border:1px solid var(--navy);padding:8px 14px;cursor:pointer}
+.install-note{font-size:12px;color:var(--navy)}
+.how{background:var(--sheet);border:1px solid var(--navy);padding:12px 14px;font-size:14px;color:var(--ink);width:100%}
+.how[hidden]{display:none}
+.how p{margin:0 0 6px}
+.how ol{margin:0;padding-left:1.4em}
+.how li{margin:2px 0}
 .summary{display:flex;flex-direction:column;gap:6px;color:var(--navy)}
 .summary-row{display:flex;flex-wrap:wrap;gap:4px 18px;justify-content:space-between;align-items:baseline}
 .big{font-size:20px}
@@ -102,6 +118,17 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
       <p class="lede"><a href="https://www.youtube.com/@hayashi_hayashi" target="_blank" rel="noopener">林さん</a>と <a href="https://www.youtube.com/@birdandinsect" target="_blank" rel="noopener">bird and insect</a> の YouTube 動画。<br class="sp">見たらチェックしてね。<br>完全コンプリートして林さんになろう</p>
     </div>
   </header>
+
+  <div class="install" id="install" hidden>
+    <div class="install-row">
+      <button type="button" class="install-btn" id="install-btn">ホーム画面に追加する</button>
+      <span class="install-note">追加してから使うと、チェックが消えにくいよ。</span>
+    </div>
+    <div class="how" id="how" hidden>
+      <p id="how-lead"></p>
+      <ol id="how-steps"></ol>
+    </div>
+  </div>
 
   <section class="summary" aria-live="polite">
     <div class="summary-row">
@@ -273,6 +300,50 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   $('q').addEventListener('input', function(e){ state.q = e.target.value; renderList(); });
   $('sort').addEventListener('change', function(e){ state.sort = e.target.value; renderList(); });
   window.addEventListener('hashchange', function(){ fromHash(); render(); });
+
+  // ---- add to home screen ----
+  (function(){
+    var box = $('install'), btn = $('install-btn'), how = $('how');
+    var standalone = false;
+    try { standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; } catch(e){}
+    var framed = false;
+    try { framed = window.self !== window.top; } catch(e){ framed = true; }
+    if (standalone || framed) return;
+    box.hidden = false;
+    var deferred = null;
+    window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferred = e; });
+    window.addEventListener('appinstalled', function(){ box.hidden = true; });
+    var ua = navigator.userAgent || '';
+    var ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    var android = /Android/.test(ua);
+    var inApp = /Line\/|FBAN|FBAV|Instagram|Twitter|MicroMessenger/i.test(ua);
+    function guide(){
+      var lead, steps;
+      if (inApp){
+        lead = 'アプリの中のブラウザでは追加できません。';
+        steps = ['右上や右下のメニューから「ブラウザで開く」「Safariで開く」を選ぶ', '開きなおしたページで、もう一度このボタンを押す'];
+      } else if (ios){
+        lead = 'iPhone・iPad は、Safari で次の順に押してください。';
+        steps = ['画面の下（または上）にある共有ボタン（四角から矢印が出ているマーク）を押す', '出てきたメニューを下にスクロールして「ホーム画面に追加」を押す', '右上の「追加」を押す'];
+      } else if (android){
+        lead = 'Android は、Chrome で次の順に押してください。';
+        steps = ['右上の「︙」メニューを押す', '「ホーム画面に追加」または「アプリをインストール」を押す'];
+      } else {
+        lead = 'パソコンでは、ブラウザから次のどちらかで追加できます。';
+        steps = ['Chrome・Edge：アドレスバー右端のインストールのマーク、またはメニューの「保存して共有」→「ページをアプリとしてインストール」', 'Safari（Mac）：メニューの「ファイル」→「Dock に追加」'];
+      }
+      $('how-lead').textContent = lead;
+      var ol = $('how-steps'); ol.textContent = '';
+      steps.forEach(function(s){ var li = document.createElement('li'); li.textContent = s; ol.appendChild(li); });
+      how.hidden = !how.hidden;
+    }
+    btn.addEventListener('click', function(){
+      if (deferred){
+        var p = deferred; deferred = null;
+        try { p.prompt(); } catch(e){ guide(); }
+      } else { guide(); }
+    });
+  })();
 
   watched = loadLocal();
   fromHash();
