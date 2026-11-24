@@ -1,0 +1,22 @@
+# 林さんになる動画チェッカー
+
+林さんと bird and insect の YouTube 動画を、見た・見てないでチェックできるリストです。
+
+- チャンネルごとにタブで切り替え
+- 見た動画にチェック（このブラウザの中に保存。サーバーには送りません）
+- 「まだ／見た」での絞り込み、動画名の検索、新しい順・短い順などの並べ替え
+- のこり本数と、のこり時間の合計を表示
+
+## 構成
+
+ビルド不要の静的サイトです。`index.html` をそのまま GitHub Pages で配信します。動画の一覧は `index.html` の中に入っています（2026年11月24日時点の「動画」タブの内容）。
+
+手元で確認するとき：
+
+```bash
+python3 -m http.server 8000
+```
+
+## フォント
+
+[DotGothic16](https://fonts.google.com/specimen/DotGothic16)（SIL Open Font License 1.1）を Google Fonts から読み込んでいます。
