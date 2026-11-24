@@ -34,8 +34,8 @@ header{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .titles{display:flex;flex-direction:column;gap:2px;min-width:0}
 h1{font-family:var(--font-display);font-weight:400;color:var(--navy);font-size:34px;line-height:1.25;letter-spacing:.04em;margin:0}
 .nb{white-space:nowrap}
-h1 svg{width:34px;height:34px;vertical-align:-4px;margin-left:8px}
 .lede{margin:0;color:var(--navy);font-size:14px}
+br.sp{display:none}
 .lede a{color:var(--navy);text-decoration:underline;text-underline-offset:3px}
 
 .summary{display:flex;flex-direction:column;gap:6px;color:var(--navy)}
@@ -86,8 +86,9 @@ tr.done td.c-title a{color:var(--muted);text-decoration:line-through}
 .status{font-size:12px;color:var(--navy);margin:0}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--navy);outline-offset:2px}
 @media (max-width:560px){
-  h1{font-size:24px} h1 svg{width:26px;height:26px}
+  h1{font-size:24px}
   .icon{width:52px;height:52px;border-radius:13px}
+  br.sp{display:inline}
   .c-date,.c-time{display:none}
   .sub{display:block}
   .c-check{width:46px}
@@ -100,8 +101,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   <header>
     <img class="icon" src="icon.png" alt="" width="64" height="64">
     <div class="titles">
-      <h1>林さんになる動画<span class="nb">チェッカー<svg viewBox="0 0 40 40" aria-hidden="true"><g fill="#1d4a60"><circle cx="20" cy="9" r="8"/><circle cx="30.5" cy="16.6" r="8"/><circle cx="26.5" cy="29" r="8"/><circle cx="13.5" cy="29" r="8"/><circle cx="9.5" cy="16.6" r="8"/></g><circle cx="20" cy="20" r="4.5" fill="#e4d9d4"/></svg></span></h1>
-      <p class="lede"><a href="https://www.youtube.com/@hayashi_hayashi" target="_blank" rel="noopener">林さん</a>と <a href="https://www.youtube.com/@birdandinsect" target="_blank" rel="noopener">bird and insect</a> の YouTube 動画。見たらチェックしてね。<br>完全コンプリートして林さんになろう</p>
+      <h1>林さんになる動画<span class="nb">チェッカー</span></h1>
+      <p class="lede"><a href="https://www.youtube.com/@hayashi_hayashi" target="_blank" rel="noopener">林さん</a>と <a href="https://www.youtube.com/@birdandinsect" target="_blank" rel="noopener">bird and insect</a> の YouTube 動画。<br class="sp">見たらチェックしてね。<br>完全コンプリートして林さんになろう</p>
     </div>
   </header>
 
